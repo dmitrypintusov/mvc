@@ -18,12 +18,6 @@
             <input type="login" name="login" value="" size="20" required /><br>
             Пароль:<br>
             <input type="password" name="password" value="" size="20" required /><br>
-            № курса:<br>
-            <input type="text" name="courseid" value="" size="20" required /><br>
-            Имя курса:<br>
-            <input type="radio" name="coursename" value="JAVA" checked>JAVA
-            <input type="radio" name="coursename" value="PYTHON">PYTHON
-            <input type="radio" name="coursename" value=".NET">.NET<br>
             ${operationMessage}
             ${errorUserExists} <br>
             <input type="submit" value="Зарегистрировать" />

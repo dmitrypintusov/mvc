@@ -39,7 +39,6 @@ public class UserDaoImplTest {
 		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
 	}
 
-	@Ignore
 	@Test
 	public void testDelete() throws Exception {
 		UserDaoImpl.getInstance().add(user);

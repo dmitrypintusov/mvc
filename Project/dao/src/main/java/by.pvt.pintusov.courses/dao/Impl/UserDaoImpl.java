@@ -5,7 +5,7 @@ import by.pvt.pintusov.courses.constants.SqlRequest;
 import by.pvt.pintusov.courses.dao.AbstractDao;
 import by.pvt.pintusov.courses.entities.User;
 import by.pvt.pintusov.courses.exceptions.DaoException;
-import by.pvt.pintusov.courses.managers.HikariPC;
+import by.pvt.pintusov.courses.managers.HikariCP;
 import by.pvt.pintusov.courses.managers.PoolManager;
 import by.pvt.pintusov.courses.utils.ClosingUtil;
 import by.pvt.pintusov.courses.utils.CoursesSystemLogger;
@@ -51,12 +51,13 @@ public class UserDaoImpl extends AbstractDao <User> {
 		 * Try with resources
 		 * needed for safe closing
 		 */
-		try (Connection connection = HikariPC.getInstance().getConnection()){
+		try (Connection connection = HikariCP.getInstance().getConnection()){
 			statement = connection.prepareStatement(SqlRequest.ADD_USER);
 			statement.setString(1, user.getFirstName());
 			statement.setString(2, user.getLastName());
 			statement.setString(3, user.getLogin());
 			statement.setString(4, user.getPassword());
+			statement.setInt(5, user.getAccessType());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			message = "Unable to add the user ";

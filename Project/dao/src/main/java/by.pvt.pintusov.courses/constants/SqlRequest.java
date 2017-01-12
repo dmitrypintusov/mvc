@@ -7,7 +7,7 @@ package by.pvt.pintusov.courses.constants;
  */
 public class SqlRequest {
 
-	public static final String ADD_USER = "INSERT INTO users (first_name, last_name, login, password) VALUES (?, ?, ?, ?)";
+	public static final String ADD_USER = "INSERT INTO users (first_name, last_name, login, password, access_type) VALUES (?, ?, ?, ?, ?)";
 	public static final String GET_ALL_STUDENTS = "SELECT first_name, last_name FROM users WHERE access_type = 1 ORDER BY last_name";
 	public static final String GET_USER_BY_ID = "SELECT * FROM users WHERE uid = ?";
 	public static final String GET_USER_BY_LOGIN = "SELECT * FROM users WHERE login = ?";

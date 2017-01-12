@@ -11,7 +11,10 @@ public class DBConfig {
 	public static final String USER = "database.user";
 	public static final String PASSWORD = "database.password";
 
-	//properties for HikariPC
-	public static final String HIKARI = "hikaridb";
-
+	//properties for HikariCP
+	public static final String HIKARI = "hikari";
+	public static final String HIKARI_DRIVER = "dataSourceClassName";
+	public static final String HIKARI_USER = "dataSource.user";
+	public static final String HIKARI_PASSWORD = "dataSource.password";
+	public static final String HIKARI_URL = "dataSource.jdbcUrl";
 }
