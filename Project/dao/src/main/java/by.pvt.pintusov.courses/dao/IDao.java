@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface IDao <T extends Entity> {
 	/**
-	 * adds entity in database
+	 * adds entity to database
 	 * @param entity - new entity
 	 * @exception DaoException throws Dao exception
 	 */
@@ -28,10 +28,9 @@ public interface IDao <T extends Entity> {
 
 	/**
 	 * Delete Entity
-	 * @param id - delete entity by id
 	 * @exception DaoException throws Dao exception
 	 */
-	void delete (int id) throws DaoException;
+	void delete () throws DaoException;
 
 	/**
 	 * Create a list of all elements in database
@@ -42,11 +41,8 @@ public interface IDao <T extends Entity> {
 
 	/**
 	 * Getting Entity by id
-	 * @param id - id of looking Entity
-	 * @return Entity by id
+	 * @return entity max id
 	 * @exception DaoException throws Dao exception
 	 */
-	T getById (int id) throws DaoException;
-
 	int getMaxId () throws DaoException;
 }

@@ -19,12 +19,8 @@ import java.util.List;
  * Created by Дмитрий on 04.12.2016.
  */
 public class OperationDaoImpl extends AbstractDao <Operation> {
-	@Override
-	public void update(Operation entity) throws DaoException {
 
-	}
-
-	private static OperationDaoImpl instance;
+		private static OperationDaoImpl instance;
 	static String message;
 
 	private OperationDaoImpl(){}
@@ -77,7 +73,6 @@ public class OperationDaoImpl extends AbstractDao <Operation> {
 		return list;
 	}
 
-	@Override
 	public Operation getById(int id) throws DaoException {
 		Operation operation = null;
 		try {
@@ -99,7 +94,6 @@ public class OperationDaoImpl extends AbstractDao <Operation> {
 		return operation;
 	}
 
-	@Override
 	public void delete(int id) throws DaoException {
 		try {
 			connection = PoolManager.getInstance().getConnection();
@@ -107,7 +101,7 @@ public class OperationDaoImpl extends AbstractDao <Operation> {
 			statement.setInt(1, id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			message = "Unable to delete operation by id ";
+			message = "Unable to deleteByCourseName operation by id ";
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
 			throw new DaoException(message, e);
 		} finally {
@@ -144,5 +138,15 @@ public class OperationDaoImpl extends AbstractDao <Operation> {
 		String date = result.getString(ColumnName.OPERATION_DATE);
 		Operation operation = EntityBuilder.buildOperation(id, userId, courseId, description, date);
 		return operation;
+	}
+
+	@Override
+	public void delete() throws DaoException {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void update(Operation entity) throws DaoException {
+		throw new UnsupportedOperationException();
 	}
 }

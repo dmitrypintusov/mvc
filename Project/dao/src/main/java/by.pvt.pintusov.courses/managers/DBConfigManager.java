@@ -1,14 +1,18 @@
 package by.pvt.pintusov.courses.managers;
 
-import by.pvt.pintusov.courses.constants.DBConfigConstant;
+import by.pvt.pintusov.courses.constants.DBConfig;
 
 import java.util.ResourceBundle;
 
 /**
- * Created by USER on 02.12.16.
+ * JDBC
+ * @author pintusov
+ * @version 1.0
  */
+
+
 public class DBConfigManager {
-	private final ResourceBundle bundle = ResourceBundle.getBundle(DBConfigConstant.DATABASE_SOURCE);
+	private final ResourceBundle bundle = ResourceBundle.getBundle(DBConfig.DB);
 	private static DBConfigManager instance;
 
 	private DBConfigManager() {}

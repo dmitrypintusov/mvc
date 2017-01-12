@@ -105,7 +105,7 @@ public class CourseServiceImpl extends AbstractService <Course> {
 	}
 
 	/**
-	 * Calls Dao delete() method
+	 * Calls Dao deleteByCourseName() method
 	 * @param id course id
 	 * @throws SQLException
 	 * @throws ServiceException

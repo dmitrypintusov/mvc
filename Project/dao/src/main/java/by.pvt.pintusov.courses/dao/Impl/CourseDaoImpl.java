@@ -47,10 +47,9 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 		try {
 			connection = PoolManager.getInstance().getConnection();
 			statement = connection.prepareStatement(SqlRequest.ADD_COURSE);
-			statement.setInt (1, course.getId());
-			statement.setString(2, course.getCourseName());
-			statement.setInt(3, course.getHours());
-			statement.setInt(4, course.getStatus());
+			statement.setString(1, course.getCourseName());
+			statement.setInt(2, course.getHours());
+			statement.setInt(3, course.getStatus());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			message = "Unable to add course ";
@@ -193,19 +192,18 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	}
 
 	/**
-	 * Delete Course by id
-	 * @param id of Course to delete
+	 * Delete Course by course name
+	 * @param courseName of Course to deleteByCourseName
 	 * @throws DaoException
 	 */
-	@Override
-	public void delete(int id) throws DaoException {
+	public void deleteByCourseName(String courseName) throws DaoException {
 		try {
 			connection = PoolManager.getInstance().getConnection();
-			statement = connection.prepareStatement(SqlRequest.DELETE_COURSE_BY_ID);
-			statement.setInt(1, id);
+			statement = connection.prepareStatement(SqlRequest.DELETE_COURSE_BY_COURSENAME);
+			statement.setString(1, courseName);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			message = "Unable to delete course by id ";
+			message = "Unable to deleteByCourseName course by id ";
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
 			throw new DaoException(message, e);
 		} finally {
@@ -246,11 +244,10 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	 * @throws SQLException
 	 */
 	private Course buildCourse (ResultSet result) throws SQLException {
-		int id = result.getInt(ColumnName.COURSES_ID);
 		String courseName = result.getString(ColumnName.COURSES_NAME);
 		int hours = result.getInt(ColumnName.COURSES_HOURS);
 		int status = result.getInt(ColumnName.COURSES_STATUS);
-		Course course = EntityBuilder.buildCourse(id, courseName, hours, status);
+		Course course = EntityBuilder.buildCourse(courseName, hours, status);
 		return course;
 	}
 
@@ -262,6 +259,16 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	 */
 	@Override
 	public void update(Course course) throws DaoException {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * No needs to implement
+	 * @throws UnsupportedOperationException
+	 * @throws DaoException
+	 */
+	@Override
+	public void delete() throws DaoException {
 		throw new UnsupportedOperationException();
 	}
 }

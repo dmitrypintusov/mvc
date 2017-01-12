@@ -20,19 +20,25 @@ public class RequestParameterParser {
 	private RequestParameterParser() {}
 
 	/**
+	 * Get command type
+	 * @param request - used for getting attribute
+	 * @return command type
+	 */
+	public static CommandType getCommandType(HttpServletRequest request) {
+		String commandName = request.getParameter(Parameters.COMMAND);
+		CommandType commandType = CommandType.LOGIN;
+		if (commandName != null) {
+			commandType = CommandType.valueOf(commandName.toUpperCase());
+		}
+		return commandType;
+	}
+
+	/**
 	 * Get User
 	 * @param request - used for creating instance
 	 * @return user instance
 	 */
 	public static User getUser(HttpServletRequest request) {
-		int id = 0;
-		if (request.getParameter(Parameters.USER_ID) != null) {
-			id = Integer.valueOf(request.getParameter(Parameters.USER_ID));
-		}
-		int courseId = 0;
-		if (request.getParameter(Parameters.COURSE_ID) != null) {
-			courseId = Integer.valueOf(request.getParameter(Parameters.COURSE_ID));
-		}
 		int accessType = 0;
 		if (request.getParameter(Parameters.USER_ACCESS_TYPE) != null) {
 			accessType = Integer.valueOf(request.getParameter(Parameters.USER_ACCESS_TYPE));
@@ -41,7 +47,7 @@ public class RequestParameterParser {
 		String lastName = request.getParameter(Parameters.USER_LAST_NAME);
 		String login = request.getParameter(Parameters.USER_LOGIN);
 		String password = request.getParameter(Parameters.USER_PASSWORD);
-		User user = EntityBuilder.buildUser(id, firstName, lastName, courseId, login, password, accessType);
+		User user = EntityBuilder.buildUser(firstName, lastName, login, password, accessType);
 		return user;
 	}
 
@@ -51,7 +57,6 @@ public class RequestParameterParser {
 	 * @return course instance
 	 */
 	public static Course getCourse(HttpServletRequest request) {
-		int id = Integer.valueOf(request.getParameter(Parameters.COURSE_ID));
 		String name = request.getParameter(Parameters.COURSE_NAME);
 		int hours = 0;
 		if (request.getParameter(Parameters.COURSE_HOURS) != null) {
@@ -63,7 +68,7 @@ public class RequestParameterParser {
 			status = Integer.valueOf(request.getParameter(Parameters.COURSE_STATUS));
 		}
 
-		Course course = EntityBuilder.buildCourse(id, name, hours, status);
+		Course course = EntityBuilder.buildCourse(name, hours, status);
 		return course;
 	}
 
@@ -92,19 +97,5 @@ public class RequestParameterParser {
 	 */
 	public static User getRecordUser(HttpServletRequest request) {
 		return (User) request.getSession().getAttribute(Parameters.USER);
-	}
-
-	/**
-	 * Get command type
-	 * @param request - used for getting attribute
-	 * @return command type
-	 */
-	public static CommandType getCommandType(HttpServletRequest request) {
-		String commandName = request.getParameter(Parameters.COMMAND);
-		CommandType commandType = CommandType.LOGIN;
-		if (commandName != null) {
-			commandType = CommandType.valueOf(commandName.toUpperCase());
-		}
-		return commandType;
 	}
 }

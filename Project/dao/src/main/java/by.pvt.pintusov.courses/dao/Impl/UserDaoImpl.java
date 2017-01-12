@@ -5,11 +5,13 @@ import by.pvt.pintusov.courses.constants.SqlRequest;
 import by.pvt.pintusov.courses.dao.AbstractDao;
 import by.pvt.pintusov.courses.entities.User;
 import by.pvt.pintusov.courses.exceptions.DaoException;
+import by.pvt.pintusov.courses.managers.HikariPC;
 import by.pvt.pintusov.courses.managers.PoolManager;
 import by.pvt.pintusov.courses.utils.ClosingUtil;
 import by.pvt.pintusov.courses.utils.CoursesSystemLogger;
 import by.pvt.pintusov.courses.utils.EntityBuilder;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,21 +47,21 @@ public class UserDaoImpl extends AbstractDao <User> {
 	 */
 	@Override
 	public void add (User user) throws DaoException {
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		/**
+		 * Try with resources
+		 * needed for safe closing
+		 */
+		try (Connection connection = HikariPC.getInstance().getConnection()){
 			statement = connection.prepareStatement(SqlRequest.ADD_USER);
 			statement.setString(1, user.getFirstName());
 			statement.setString(2, user.getLastName());
-			statement.setInt(3, user.getCourseId());
-			statement.setString(4, user.getLogin());
-			statement.setString(5, user.getPassword());
+			statement.setString(3, user.getLogin());
+			statement.setString(4, user.getPassword());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			message = "Unable to add the user ";
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
-			throw new DaoException (message, e);
-		} finally {
-			ClosingUtil.close(statement);
+			throw new DaoException(message, e);
 		}
 	}
 
@@ -76,9 +78,7 @@ public class UserDaoImpl extends AbstractDao <User> {
 			statement = connection.prepareStatement(SqlRequest.GET_ALL_STUDENTS);
 			result = statement.executeQuery();
 			while (result.next()) {
-				User user = new User ();
-				user.setFirstName (result.getString (ColumnName.USER_FIRST_NAME));
-				user.setLastName(result.getString(ColumnName.USER_LAST_NAME));
+				User user = UserDaoImpl.getInstance().buildUser(result);
 				list.add(user);
 			}
 		} catch (SQLException e) {
@@ -98,7 +98,6 @@ public class UserDaoImpl extends AbstractDao <User> {
 	 * @return user
 	 * @throws DaoException
 	 */
-	@Override
 	public User getById(int id) throws DaoException {
 		User user = null;
 		try {
@@ -206,19 +205,18 @@ public class UserDaoImpl extends AbstractDao <User> {
 	}
 
 	/**
-	 * Delete User from database
-	 * @param id - used user id
+	 * Delete User from database by login
+	 * @param login - used user id
 	 * @throws DaoException
 	 */
-	@Override
-	public void delete (int id) throws DaoException {
+	public void deleteByLogin (String login) throws DaoException {
 		try {
 			connection = PoolManager.getInstance().getConnection();
-			statement = connection.prepareStatement(SqlRequest.DELETE_USER_BY_ID);
-			statement.setInt(1, id);
+			statement = connection.prepareStatement(SqlRequest.DELETE_USER_BY_LOGIN);
+			statement.setString(1, login);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			message = "Unable to delete user ";
+			message = "Unable to deleteByCourseName user ";
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
 			throw new DaoException(message, e);
 		} finally {
@@ -259,14 +257,12 @@ public class UserDaoImpl extends AbstractDao <User> {
 	 * @throws SQLException
 	 */
 	private User buildUser (ResultSet result) throws SQLException {
-		int id = result.getInt(ColumnName.USER_ID);
 		String firstName = result.getString(ColumnName.USER_FIRST_NAME);
 		String lastName = result.getString(ColumnName.USER_LAST_NAME);
-		int cid = result.getInt(ColumnName.COURSES_ID);
 		String login = result.getString(ColumnName.USER_LOGIN);
 		String password = result.getString(ColumnName.USER_PASSWORD);
 		int accessType = result.getInt(ColumnName.USER_ACCESS_TYPE);
-		User user = EntityBuilder.buildUser(id, firstName, lastName, cid, login, password, accessType);
+		User user = EntityBuilder.buildUser(firstName, lastName, login, password, accessType);
 		return user;
 	}
 
@@ -279,5 +275,15 @@ public class UserDaoImpl extends AbstractDao <User> {
 	@Override
 	public void update(User user) throws DaoException {
 		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * No needs to implement
+	 * @throws UnsupportedOperationException
+	 * @throws DaoException
+	 */
+	@Override
+	public void delete() throws DaoException {
+		throw new UnsupportedOperationException ();
 	}
 }

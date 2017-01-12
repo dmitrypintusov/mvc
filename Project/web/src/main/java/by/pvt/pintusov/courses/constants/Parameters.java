@@ -14,13 +14,13 @@ public class Parameters {
 	public static final String USER_LAST_NAME = "lastname";
 	public static final String USER_LOGIN = "login";
 	public static final String USER_PASSWORD = "password";
-	public static final String USER_ACCESS_TYPE = "accessType";
+	public static final String USER_ACCESS_TYPE = "accesstype";
 	public static final String USER_TYPE = "usertype";
 	public static final String USERS_LIST = "userslist";
 	//course parameters
 	public static final String COURSE = "course";
 	public static final String COURSE_ID = "courseid";
-	public static final String COURSE_NAME = "name";
+	public static final String COURSE_NAME = "coursename";
 	public static final String COURSE_HOURS = "hours";
 	public static final String COURSE_STATUS = "status";
 	public static final String COURSES_LIST = "coursesList";

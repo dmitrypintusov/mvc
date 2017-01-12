@@ -10,6 +10,6 @@
 		username="root"
 		password="1234"
 		driverClassName="com.mysql.jdbc.Driver"
-		url="jdbc:mysql://localhost:3306/payments?useEncoding=yes&amp;characterEncoding=UTF-8"
+		url="jdbc:mysql://localhost:3306/courses?useEncoding=yes&amp;characterEncoding=UTF-8"
 	/>
 </Context>

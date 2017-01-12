@@ -10,4 +10,8 @@ public class DBConfig {
 	public static final String URL = "database.url";
 	public static final String USER = "database.user";
 	public static final String PASSWORD = "database.password";
+
+	//properties for HikariPC
+	public static final String HIKARI = "hikaridb";
+
 }

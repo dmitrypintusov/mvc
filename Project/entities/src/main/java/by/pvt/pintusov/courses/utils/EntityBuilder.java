@@ -14,21 +14,17 @@ public class EntityBuilder {
 
 	/**
 	 * Creates user
-	 * @param id - user's id
 	 * @param firstName - user's first name
 	 * @param lastName user's last name
-	 * @param cid - course's id
 	 * @param login - user's login
 	 * @param password - user's password
 	 * @param accessType - user's access type (0 - student, 1 - teacher)
 	 * @return entity of <strong>User</strong>
 	 */
-	public static User buildUser (int id, String firstName, String lastName, int cid, String login, String password, int accessType) {
+	public static User buildUser (String firstName, String lastName, String login, String password, int accessType) {
 		User user = new User ();
-		user.setId(id);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
-		user.setCourseId(cid);
 		user.setLogin(login);
 		user.setPassword(password);
 		user.setAccessType(accessType);
@@ -37,15 +33,14 @@ public class EntityBuilder {
 
 	/**
 	 * Creates course
-	 * @param id - account's id
+
 	 * @param courseName - course's name
 	 * @param hours - hours of study
 	 * @param status - course's status
 	 * @return entity of <strong>Course</strong>
 	 */
-	public static Course buildCourse (int id, String courseName, int hours, int status) {
+	public static Course buildCourse (String courseName, int hours, int status) {
 		Course course = new Course ();
-		course.setId(id);
 		course.setCourseName(courseName);
 		course.setHours(hours);
 		course.setStatus(status);
