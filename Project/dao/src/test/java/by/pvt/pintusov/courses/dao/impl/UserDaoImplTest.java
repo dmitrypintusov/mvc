@@ -31,7 +31,6 @@ public class UserDaoImplTest {
 		Assert.assertEquals(instance1.hashCode(), instance2.hashCode());
 	}
 
-	@Ignore
 	@Test
 	public void testAdd() throws Exception {
 		UserDaoImpl.getInstance().add(user);
