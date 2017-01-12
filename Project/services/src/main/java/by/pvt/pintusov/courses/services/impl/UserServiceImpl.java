@@ -202,27 +202,4 @@ public class UserServiceImpl extends AbstractService <User> {
 		}
 		return isNew;
 	}
-
-	/**
-	 * Calls Dao user add () method
-	 * Calls Dao course add () method
-	 * @param user - User instance
-	 * @param course - Course instance
-	 * @throws SQLException
-	 * @throws ServiceException
-	 */
-	public void registerUser (User user, Course course) throws SQLException, ServiceException {
-		try {
-			connection = PoolManager.getInstance().getConnection();
-			connection.setAutoCommit(false);
-			UserDaoImpl.getInstance().add(user);
-			CourseDaoImpl.getInstance().add(course);
-			connection.commit();
-			CoursesSystemLogger.getInstance().logError(getClass(), TransactionStatus.TRANSACTION_SUCCEED);
-		} catch (SQLException | DaoException e) {
-			connection.rollback();
-			CoursesSystemLogger.getInstance().logError(getClass(), TransactionStatus.TRANSACTION_FAILED);
-			throw new ServiceException(e.getMessage());
-		}
-	}
 }

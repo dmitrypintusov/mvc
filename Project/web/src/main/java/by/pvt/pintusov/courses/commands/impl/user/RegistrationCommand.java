@@ -23,19 +23,15 @@ import java.sql.SQLException;
 
 public class RegistrationCommand extends AbstractCommand {
 	private User user;
-	private Course course;
-	private String courseIdString;
 
 	@Override
 	public String execute(HttpServletRequest request) {
 		String page = null;
 		try {
 			user = RequestParameterParser.getUser(request);
-			courseIdString = request.getParameter(Parameters.COURSE_ID);
 			if (areFieldsFullStocked()) {
-				course = RequestParameterParser.getCourse(request);
 				if (UserServiceImpl.getInstance().checkIsNewUser(user)) {
-					UserServiceImpl.getInstance().registerUser(user, course);
+					UserServiceImpl.getInstance().add(user);
 					page = ConfigurationManager.getInstance().getProperty(PagePath.REGISTRATION_PAGE_PATH);
 					request.setAttribute(Parameters.OPERATION_MESSAGE, MessageManager.getInstance().getProperty(MessageConstants.SUCCESS_OPERATION));
 				} else {
