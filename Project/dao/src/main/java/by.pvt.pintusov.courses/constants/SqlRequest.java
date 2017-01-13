@@ -20,10 +20,11 @@ public class SqlRequest {
 	public static final String ADD_COURSE = "INSERT INTO courses (name, hours, status) VALUES (?, ?, ?)";
 	public static final String GET_ALL_COURSES = "SELECT * FROM courses";
 	public static final String GET_COURSE_BY_ID = "SELECT * FROM courses WHERE cid = ?";
+	public static final String GET_COURSE_BY_NAME = "SELECT * FROM courses WHERE name = ?";
 	public static final String GET_LAST_COURSE_ID = "SELECT MAX(cid) FROM courses";
 	public static final String GET_ACTIVE_COURSES = "SELECT * FROM courses WHERE status = 0";
 	public static final String CHECK_COURSE_STATUS = "SELECT status FROM courses WHERE status = ?";
-	public static final String UPDATE_COURSE_STATUS = "UPDATE status FROM courses SET status = ? WHERE cid = ?";
+	public static final String UPDATE_COURSE_STATUS = "UPDATE status FROM courses SET status = ? WHERE name = ?";
 	public static final String DELETE_COURSE_BY_COURSENAME = "DELETE FROM courses WHERE name = ?";
 
 	public static final String ADD_OPERATION = "INSERT INTO operations (uid, cid, description, date) VALUES (?, ?, ?, ?)";

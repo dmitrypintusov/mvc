@@ -26,7 +26,7 @@ public class RegistrationCommand extends AbstractCommand {
 
 	@Override
 	public String execute(HttpServletRequest request) {
-		String page = null;
+		String page;
 		try {
 			user = RequestParameterParser.getUser(request);
 			if (areFieldsFullStocked()) {
@@ -49,14 +49,12 @@ public class RegistrationCommand extends AbstractCommand {
 			request.setAttribute(Parameters.OPERATION_MESSAGE, MessageManager.getInstance().getProperty(MessageConstants.INVALID_NUMBER_FORMAT));
 			page = ConfigurationManager.getInstance().getProperty(PagePath.REGISTRATION_PAGE_PATH);
 		}
-		//TODO modify
 		catch (NullPointerException e) {
 			page = ConfigurationManager.getInstance().getProperty(PagePath.INDEX_PAGE_PATH);
 		}
 		return page;
 	}
 
-	//TODO javascript
 	private boolean areFieldsFullStocked () {
 		boolean isFullStocked = false;
 		if (!user.getFirstName().isEmpty()

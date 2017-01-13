@@ -47,7 +47,6 @@ public class UserDaoImplTest {
 		Assert.assertNull(actual);
 	}
 
-	@Ignore
 	@Test
 	public void testIsAuthorized () throws Exception {
 		UserDaoImpl.getInstance().add(user);
@@ -56,7 +55,6 @@ public class UserDaoImplTest {
 		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
 	}
 
-	@Ignore
 	@Test
 	public void testGetById () throws Exception {
 		UserDaoImpl.getInstance().add(user);
@@ -65,7 +63,6 @@ public class UserDaoImplTest {
 		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
 	}
 
-	@Ignore
 	@Test
 	public void testGetByLogin () throws Exception {
 		UserDaoImpl.getInstance().add(user);
@@ -74,7 +71,6 @@ public class UserDaoImplTest {
 		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
 	}
 
-	@Ignore
 	@Test
 	public void testIsNewUser () throws Exception {
 		UserDaoImpl.getInstance().add(user);

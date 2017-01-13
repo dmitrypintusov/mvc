@@ -25,16 +25,6 @@
             <input type="login" name="login" value="" size="20" required /><br>
             Пароль:<br>
             <input type="password" name="password" value="" size="20" required /><br>
-            № курса:<br>
-            <input type="text" name="courseid" value="" size="20" required /><br>
-            Имя курса:<br>
-            <p><select name="coursename" required>
-                <option disabled selected>Выберите курс</option>
-                <option value="Java">JAVA</option>
-                <option value=".Net">.NET</option>
-                <option value="HTML">HTML</option>
-                <option value="Python">PYTHON</option>
-            </select></p>
 
             ${operationMessage}
             ${errorUserExists} <br>

@@ -140,16 +140,16 @@ public class CourseServiceImpl extends AbstractService <Course> {
 
 	/**
 	 * Calls Dao updateCourseStatus() method
-	 * @param id - course id
+	 * @param name - course name
 	 * @param status - course status
 	 * @throws SQLException
 	 * @throws ServiceException
 	 */
-	public void updateCourseStatus (int id, int status) throws SQLException, ServiceException {
+	public void updateCourseStatus (String name, int status) throws SQLException, ServiceException {
 		try {
 			connection = PoolManager.getInstance().getConnection();
 			connection.setAutoCommit(false);
-			CourseDaoImpl.getInstance().updateCourseStatus(id, status);
+			CourseDaoImpl.getInstance().updateCourseStatus(name, status);
 			connection.commit();
 			CoursesSystemLogger.getInstance().logError(getClass(), TransactionStatus.TRANSACTION_SUCCEED);
 		} catch (SQLException |DaoException e) {

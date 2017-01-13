@@ -31,7 +31,6 @@ public class CourseServiceImplTest {
 		operation = null;
 	}
 
-	@Ignore
 	@Test
 	public void testGetInstance() throws Exception {
 		CourseServiceImpl instance1 = CourseServiceImpl.getInstance();

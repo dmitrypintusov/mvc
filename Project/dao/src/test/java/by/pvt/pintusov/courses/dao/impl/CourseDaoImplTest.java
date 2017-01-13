@@ -31,11 +31,10 @@ public class CourseDaoImplTest {
 		Assert.assertEquals(instance1.hashCode(), instance2.hashCode());
 	}
 
-	@Ignore
 	@Test
 	public void testAdd() throws Exception{
 		CourseDaoImpl.getInstance().add(course);
-		Course actual = CourseDaoImpl.getInstance().getById(course.getId());
+		Course actual = CourseDaoImpl.getInstance().getByCourseName(course.getCourseName());
 		Assert.assertEquals(course, actual);
 		CourseDaoImpl.getInstance().deleteByCourseName(course.getCourseName());
 	}
@@ -49,22 +48,21 @@ public class CourseDaoImplTest {
 
 	@Ignore
 	@Test
-	public void testUpdateAmount() throws Exception {
+	public void testUpdateCourseStatus() throws Exception {
 		CourseDaoImpl.getInstance().add(course);
-		int adding = 100;
-		course.setHours(course.getHours() + adding);
-		CourseDaoImpl.getInstance().updateCourseStatus(adding, course.getId());
-		Course actual = CourseDaoImpl.getInstance().getById(course.getId());
-		CourseDaoImpl.getInstance().deleteByCourseName(course.getCourseName());
+		int newStatus = 1;
+		course.setStatus(newStatus);
+		CourseDaoImpl.getInstance().updateCourseStatus(course.getCourseName(), newStatus);
+		Course actual = CourseDaoImpl.getInstance().getByCourseName(course.getCourseName());
 		Assert.assertEquals(course, actual);
+		CourseDaoImpl.getInstance().deleteByCourseName(course.getCourseName());
 	}
 
-	@Ignore
 	@Test
 	public void testDelete() throws Exception{
 		CourseDaoImpl.getInstance().add(course);
 		CourseDaoImpl.getInstance().deleteByCourseName(course.getCourseName());
-		Course actual = CourseDaoImpl.getInstance().getById(course.getId());
+		Course actual = CourseDaoImpl.getInstance().getByCourseName(course.getCourseName());
 		Assert.assertNull(actual);
 	}
 }

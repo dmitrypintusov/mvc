@@ -74,8 +74,8 @@ public class UserDaoImpl extends AbstractDao <User> {
 	@Override
 	public List<User> getAll() throws DaoException {
 		List <User> list = new ArrayList<>();
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection())
+		{
 			statement = connection.prepareStatement(SqlRequest.GET_ALL_STUDENTS);
 			result = statement.executeQuery();
 			while (result.next()) {
@@ -86,9 +86,6 @@ public class UserDaoImpl extends AbstractDao <User> {
 			message = "Unable to return students list ";
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
 			throw new DaoException (message, e);
-		} finally {
-			ClosingUtil.close(result);
-			ClosingUtil.close(statement);
 		}
 		return list;
 	}
@@ -101,8 +98,7 @@ public class UserDaoImpl extends AbstractDao <User> {
 	 */
 	public User getById(int id) throws DaoException {
 		User user = null;
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection()) {
 			statement = connection.prepareStatement(SqlRequest.GET_USER_BY_ID);
 			statement.setInt(1, id);
 			result = statement.executeQuery();
@@ -115,10 +111,6 @@ public class UserDaoImpl extends AbstractDao <User> {
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
 			throw new DaoException(message, e);
 		}
-		finally{
-			ClosingUtil.close(result);
-			ClosingUtil.close(statement);
-		}
 		return user;
 	}
 
@@ -130,8 +122,7 @@ public class UserDaoImpl extends AbstractDao <User> {
 	 */
 	public User getByLogin (String login) throws DaoException {
 		User user = null;
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection()) {
 			statement = connection.prepareStatement(SqlRequest.GET_USER_BY_LOGIN);
 			statement.setString(1, login);
 			result = statement.executeQuery();
@@ -142,9 +133,6 @@ public class UserDaoImpl extends AbstractDao <User> {
 			message = "Unable to find user by login ";
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
 			throw new DaoException(message, e);
-		} finally {
-			ClosingUtil.close(result);
-			ClosingUtil.close(statement);
 		}
 		return user;
 	}
@@ -157,8 +145,7 @@ public class UserDaoImpl extends AbstractDao <User> {
 	 */
 	public boolean isNewUser (String login) throws DaoException {
 		boolean isNew = true;
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection()) {
 			statement = connection.prepareStatement(SqlRequest.CHECK_LOGIN);
 			statement.setString(1, login);
 			result = statement.executeQuery();
@@ -169,9 +156,6 @@ public class UserDaoImpl extends AbstractDao <User> {
 			message = "Unable to check the user ";
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
 			throw new DaoException(message, e);
-		} finally {
-			ClosingUtil.close(result);
-			ClosingUtil.close(statement);
 		}
 		return isNew;
 	}
@@ -185,8 +169,7 @@ public class UserDaoImpl extends AbstractDao <User> {
 	 */
 	public boolean isAuthorized (String login, String password) throws DaoException {
 		boolean isLogIn = false;
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection()) {
 			statement = connection.prepareStatement(SqlRequest.CHECK_AUTHORIZATION);
 			statement.setString(1, login);
 			statement.setString(2, password);
@@ -198,9 +181,6 @@ public class UserDaoImpl extends AbstractDao <User> {
 			message = "Unable to check authorization ";
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
 			throw new DaoException(message, e);
-		} finally {
-			ClosingUtil.close(result);
-			ClosingUtil.close(statement);
 		}
 		return isLogIn;
 	}
@@ -211,8 +191,7 @@ public class UserDaoImpl extends AbstractDao <User> {
 	 * @throws DaoException
 	 */
 	public void deleteByLogin (String login) throws DaoException {
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection()) {
 			statement = connection.prepareStatement(SqlRequest.DELETE_USER_BY_LOGIN);
 			statement.setString(1, login);
 			statement.executeUpdate();
@@ -220,8 +199,6 @@ public class UserDaoImpl extends AbstractDao <User> {
 			message = "Unable to deleteByCourseName user ";
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
 			throw new DaoException(message, e);
-		} finally {
-			ClosingUtil.close(statement);
 		}
 	}
 
@@ -233,8 +210,7 @@ public class UserDaoImpl extends AbstractDao <User> {
 	@Override
 	public int getMaxId() throws DaoException {
 		int lastId = -1;
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection()){
 			statement = connection.prepareStatement(SqlRequest.GET_LAST_USER_ID);
 			result = statement.executeQuery();
 			while (result.next()){
@@ -244,9 +220,6 @@ public class UserDaoImpl extends AbstractDao <User> {
 			message = "Unable to get max user id ";
 			CoursesSystemLogger.getInstance().logError(getClass(), message);
 			throw new DaoException(message, e);
-		} finally {
-			ClosingUtil.close(result);
-			ClosingUtil.close(statement);
 		}
 		return lastId;
 	}

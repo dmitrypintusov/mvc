@@ -8,10 +8,12 @@ import by.pvt.pintusov.courses.entities.Course;
 import by.pvt.pintusov.courses.entities.User;
 import by.pvt.pintusov.courses.exceptions.DaoException;
 import by.pvt.pintusov.courses.exceptions.ServiceException;
+import by.pvt.pintusov.courses.managers.HikariCP;
 import by.pvt.pintusov.courses.managers.PoolManager;
 import by.pvt.pintusov.courses.services.AbstractService;
 import by.pvt.pintusov.courses.utils.CoursesSystemLogger;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -45,10 +47,11 @@ public class UserServiceImpl extends AbstractService <User> {
 	 */
 	@Override
 	public void add(User user) throws SQLException, ServiceException {
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection()){
 			connection.setAutoCommit(false);
-			UserDaoImpl.getInstance().add(user);
+			if (user != null) {
+				UserDaoImpl.getInstance().add(user);
+			}
 			connection.commit();
 			CoursesSystemLogger.getInstance().logError(getClass(), TransactionStatus.TRANSACTION_SUCCEED);
 		} catch (SQLException | DaoException e) {
@@ -67,8 +70,7 @@ public class UserServiceImpl extends AbstractService <User> {
 	@Override
 	public List<User> getAll() throws SQLException, ServiceException {
 		List <User> users = null;
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection()) {
 			connection.setAutoCommit(false);
 			users = UserDaoImpl.getInstance().getAll();
 			connection.commit();
@@ -125,8 +127,7 @@ public class UserServiceImpl extends AbstractService <User> {
 	 */
 	public boolean checkUserAuthorization (String login, String password) throws SQLException, ServiceException {
 		boolean isAuthorized = false;
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection()) {
 			connection.setAutoCommit(false);
 			isAuthorized = UserDaoImpl.getInstance().isAuthorized(login, password);
 			connection.commit();
@@ -148,8 +149,7 @@ public class UserServiceImpl extends AbstractService <User> {
 	 */
 	public User getUserByLogin (String login) throws SQLException, ServiceException {
 		User user = null;
-		try {
-			connection = PoolManager.getInstance().getConnection();
+		try (Connection connection = HikariCP.getInstance().getConnection()) {
 			connection.setAutoCommit(false);
 			user = UserDaoImpl.getInstance().getByLogin(login);
 			connection.commit();
