@@ -17,4 +17,5 @@ public class DBConfig {
 	public static final String HIKARI_USER = "dataSource.user";
 	public static final String HIKARI_PASSWORD = "dataSource.password";
 	public static final String HIKARI_URL = "dataSource.jdbcUrl";
+	public static final int HIKARI_POOLSIZE = 50;
 }

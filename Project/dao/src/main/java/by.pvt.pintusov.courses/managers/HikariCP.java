@@ -1,6 +1,7 @@
 package by.pvt.pintusov.courses.managers;
 
 import by.pvt.pintusov.courses.constants.DBConfig;
+import by.pvt.pintusov.courses.exceptions.DaoException;
 import by.pvt.pintusov.courses.utils.CoursesSystemLogger;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -16,6 +17,7 @@ import java.util.ResourceBundle;
 public class HikariCP {
 	private static HikariCP instance;
 	private HikariDataSource dataSource;
+	private static ThreadLocal <Connection> connections = new ThreadLocal<>();
 
 	private HikariCP () {
 		ResourceBundle bundle = ResourceBundle.getBundle(DBConfig.HIKARI);
@@ -23,6 +25,7 @@ public class HikariCP {
 		dataSource.setJdbcUrl(bundle.getString(DBConfig.HIKARI_URL));
 		dataSource.setUsername(bundle.getString(DBConfig.HIKARI_USER));
 		dataSource.setPassword(bundle.getString(DBConfig.HIKARI_PASSWORD));
+		dataSource.setMaximumPoolSize(DBConfig.HIKARI_POOLSIZE);
 	}
 
 	/**
@@ -40,9 +43,18 @@ public class HikariCP {
 	 * @return connection - Connection instance
 	 * @throws SQLException
 	 */
-	public Connection getConnection () throws SQLException {
-		Connection connection = dataSource.getConnection();
-		return connection;
+	public Connection getConnection () throws DaoException {
+		try {
+			if (connections.get() == null) {
+			Connection connection = dataSource.getConnection();
+				connections.set(connection);
+			}
+		} catch (SQLException e) {
+			String message = "Unable to get connection";
+			CoursesSystemLogger.getInstance().logError(getClass(), message);
+			throw new DaoException(message, e);
+		}
+		return connections.get();
 	}
 
 	/**

@@ -18,14 +18,16 @@ import java.util.List;
 /**
  * Created by Дмитрий on 04.12.2016.
  */
-public class OperationDaoImpl extends AbstractDao <Operation> {
+public class OperationDaoImpl extends AbstractDao<Operation> {
 
-		private static OperationDaoImpl instance;
+	private static OperationDaoImpl instance;
 	static String message;
+	PoolManager manager = PoolManager.getInstance();
 
-	private OperationDaoImpl(){}
+	private OperationDaoImpl() {
+	}
 
-	public static synchronized OperationDaoImpl getInstance () {
+	public static synchronized OperationDaoImpl getInstance() {
 		if (instance == null) {
 			instance = new OperationDaoImpl();
 		}
@@ -35,7 +37,7 @@ public class OperationDaoImpl extends AbstractDao <Operation> {
 	@Override
 	public void add(Operation operation) throws DaoException {
 		try {
-			connection = PoolManager.getInstance().getConnection();
+			connection = manager.getConnection();
 			statement = connection.prepareStatement(SqlRequest.ADD_OPERATION);
 			statement.setInt(1, operation.getUserId());
 			statement.setInt(2, operation.getCourseId());
@@ -53,13 +55,13 @@ public class OperationDaoImpl extends AbstractDao <Operation> {
 
 	@Override
 	public List<Operation> getAll() throws DaoException {
-		List <Operation> list = new ArrayList<>();
+		List<Operation> list = new ArrayList<>();
 		try {
 			connection = PoolManager.getInstance().getConnection();
 			statement = connection.prepareStatement(SqlRequest.GET_ALL_OPERATIONS);
 			result = statement.executeQuery();
 			while (result.next()) {
-				Operation operation = buildOperation (result);
+				Operation operation = buildOperation(result);
 				list.add(operation);
 			}
 		} catch (SQLException e) {
@@ -130,7 +132,7 @@ public class OperationDaoImpl extends AbstractDao <Operation> {
 		return lastId;
 	}
 
-	public static Operation buildOperation (ResultSet result) throws SQLException {
+	public static Operation buildOperation(ResultSet result) throws SQLException {
 		int id = result.getInt(ColumnName.OPERATION_ID);
 		int userId = result.getInt(ColumnName.USER_ID);
 		int courseId = result.getInt(ColumnName.COURSES_ID);

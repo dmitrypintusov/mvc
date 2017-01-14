@@ -12,15 +12,17 @@ import org.junit.*;
  */
 
 public class CourseDaoImplTest {
-	private Course course;
+	private static Course course;
 
-	@Before
-	public void setUp(){
+	@BeforeClass
+	public static void setUp() throws Exception {
 		course = EntityBuilder.buildCourse("TEST", 100, 0);
+		CourseDaoImpl.getInstance().add(course);
 	}
 
-	@After
-	public void tearDown(){
+	@AfterClass
+	public static void tearDown() throws Exception {
+		CourseDaoImpl.getInstance().deleteByCourseName(course.getCourseName());
 		course = null;
 	}
 
@@ -33,10 +35,9 @@ public class CourseDaoImplTest {
 
 	@Test
 	public void testAdd() throws Exception{
-		CourseDaoImpl.getInstance().add(course);
 		Course actual = CourseDaoImpl.getInstance().getByCourseName(course.getCourseName());
 		Assert.assertEquals(course, actual);
-		CourseDaoImpl.getInstance().deleteByCourseName(course.getCourseName());
+
 	}
 
 	@Ignore
@@ -49,18 +50,15 @@ public class CourseDaoImplTest {
 	@Ignore
 	@Test
 	public void testUpdateCourseStatus() throws Exception {
-		CourseDaoImpl.getInstance().add(course);
 		int newStatus = 1;
 		course.setStatus(newStatus);
 		CourseDaoImpl.getInstance().updateCourseStatus(course.getCourseName(), newStatus);
 		Course actual = CourseDaoImpl.getInstance().getByCourseName(course.getCourseName());
 		Assert.assertEquals(course, actual);
-		CourseDaoImpl.getInstance().deleteByCourseName(course.getCourseName());
 	}
 
 	@Test
 	public void testDelete() throws Exception{
-		CourseDaoImpl.getInstance().add(course);
 		CourseDaoImpl.getInstance().deleteByCourseName(course.getCourseName());
 		Course actual = CourseDaoImpl.getInstance().getByCourseName(course.getCourseName());
 		Assert.assertNull(actual);

@@ -25,7 +25,6 @@ import java.util.List;
 
 public class CourseDaoImpl extends AbstractDao <Course> {
 	private static CourseDaoImpl instance;
-	static String message;
 
 	private CourseDaoImpl () {}
 	/**
@@ -46,7 +45,8 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	 */
 	@Override
 	public void add(Course course) throws DaoException {
-		try (Connection connection = HikariCP.getInstance().getConnection()) {
+		try {
+			connection = manager.getConnection();
 			statement = connection.prepareStatement(SqlRequest.ADD_COURSE);
 			statement.setString(1, course.getCourseName());
 			statement.setInt(2, course.getHours());
@@ -54,7 +54,7 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			message = "Unable to add course ";
-			CoursesSystemLogger.getInstance().logError(getClass(), message);
+			logger.logError(getClass(), message);
 			throw  new DaoException(message, e);
 		}
 	}
@@ -67,7 +67,8 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	@Override
 	public List<Course> getAll() throws DaoException {
 		List <Course> list = new ArrayList<>();
-		try (Connection connection = HikariCP.getInstance().getConnection()) {
+		try {
+			connection = manager.getConnection();
 			statement = connection.prepareStatement(SqlRequest.GET_ALL_COURSES);
 			result = statement.executeQuery();
 			while (result.next()){
@@ -76,7 +77,7 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 			}
 		} catch (SQLException e) {
 			message = "Unable to get courses list ";
-			CoursesSystemLogger.getInstance().logError(getClass(), message);
+			logger.logError(getClass(), message);
 			throw new DaoException(message, e);
 		}
 		return list;
@@ -90,16 +91,17 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	 */
 	public Course getById (int id) throws DaoException {
 		Course course = null;
-		try (Connection connection = HikariCP.getInstance().getConnection()) {
+		try {
+			connection = manager.getConnection();
 			statement = connection.prepareStatement(SqlRequest.GET_COURSE_BY_ID);
 			statement.setInt(1, id);
 			result = statement.executeQuery();
 			while (result.next()) {
-				course =buildCourse(result);
+				course = buildCourse(result);
 			}
 		} catch (SQLException e) {
 			message = "Unable to get course by id ";
-			CoursesSystemLogger.getInstance().logError(getClass(), message);
+			logger.logError(getClass(), message);
 			throw new DaoException(message, e);
 		}
 		return course;
@@ -107,7 +109,8 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 
 	public Course getByCourseName (String name) throws DaoException {
 		Course course = null;
-		try (Connection connection = HikariCP.getInstance().getConnection()) {
+		try {
+			connection = manager.getConnection();
 			statement = connection.prepareStatement(SqlRequest.GET_COURSE_BY_NAME);
 			statement.setString(1, name);
 			result = statement.executeQuery();
@@ -116,7 +119,7 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 			}
 		} catch (SQLException e) {
 			message = "Unable to get course by id ";
-			CoursesSystemLogger.getInstance().logError(getClass(), message);
+			logger.logError(getClass(), message);
 			throw new DaoException(message, e);
 		}
 		return course;
@@ -130,7 +133,8 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	 */
 	public boolean isCourseStatusEnded (int id) throws DaoException {
 		boolean isEnded = false;
-		try (Connection connection = HikariCP.getInstance().getConnection()) {
+		try {
+			connection = manager.getConnection();
 			statement = connection.prepareStatement(SqlRequest.CHECK_COURSE_STATUS);
 			statement.setInt(1, id);
 			result = statement.executeQuery();
@@ -141,7 +145,7 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 			}
 		} catch (SQLException e) {
 			message = "Unable to check course status ";
-			CoursesSystemLogger.getInstance().logError(getClass(), message);
+			logger.logError(getClass(), message);
 			throw new DaoException(message, e);
 		}
 		return isEnded;
@@ -154,7 +158,8 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	 */
 	public List <Course> getActiveCourses () throws DaoException {
 		List <Course> list = new ArrayList<>();
-		try (Connection connection = HikariCP.getInstance().getConnection()) {
+		try {
+			connection = manager.getConnection();
 			statement = connection.prepareStatement(SqlRequest.GET_ACTIVE_COURSES);
 			result = statement.executeQuery();
 			while (result.next()){
@@ -163,7 +168,7 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 			}
 		} catch (SQLException e) {
 			message = "Unable to get active courses ";
-			CoursesSystemLogger.getInstance().logError(getClass(), message);
+			logger.logError(getClass(), message);
 			throw new DaoException(message, e);
 		}
 		return list;
@@ -176,14 +181,15 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	 * @throws DaoException
 	 */
 	public void updateCourseStatus (String name, int status) throws DaoException {
-		try (Connection connection = HikariCP.getInstance().getConnection()) {
+		try {
+			connection = manager.getConnection();
 			statement = connection.prepareStatement(SqlRequest.UPDATE_COURSE_STATUS);
 			statement.setString(1, name);
 			statement.setInt(2, status);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			message = "Unable to update course status ";
-			CoursesSystemLogger.getInstance().logError(getClass(), message);
+			logger.logError(getClass(), message);
 			throw new DaoException(message, e);
 		}
 	}
@@ -194,13 +200,14 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	 * @throws DaoException
 	 */
 	public void deleteByCourseName(String courseName) throws DaoException {
-		try (Connection connection = HikariCP.getInstance().getConnection()) {
+		try {
+			connection = manager.getConnection();
 			statement = connection.prepareStatement(SqlRequest.DELETE_COURSE_BY_COURSENAME);
 			statement.setString(1, courseName);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			message = "Unable to deleteByCourseName course by id ";
-			CoursesSystemLogger.getInstance().logError(getClass(), message);
+			logger.logError(getClass(), message);
 			throw new DaoException(message, e);
 		}
 	}
@@ -213,7 +220,8 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 	@Override
 	public int getMaxId() throws DaoException {
 		int lastId = -1;
-		try (Connection connection = HikariCP.getInstance().getConnection()) {
+		try {
+			connection = manager.getConnection();
 			statement = connection.prepareStatement(SqlRequest.GET_LAST_COURSE_ID);
 			result = statement.executeQuery();
 			while (result.next()) {
@@ -221,7 +229,7 @@ public class CourseDaoImpl extends AbstractDao <Course> {
 			}
 		} catch (SQLException e) {
 			message = "Unable to get max course id ";
-			CoursesSystemLogger.getInstance().logError(getClass(), message);
+			logger.logError(getClass(), message);
 			throw new DaoException(message, e);
 		}
 		return lastId;

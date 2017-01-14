@@ -84,7 +84,6 @@
     </dependencyManagement>
 
     <build>
-        <finalName>CoursesSystem</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

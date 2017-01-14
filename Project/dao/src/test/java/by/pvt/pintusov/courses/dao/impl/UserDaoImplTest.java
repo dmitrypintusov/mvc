@@ -12,15 +12,17 @@ import org.junit.*;
  */
 
 public class UserDaoImplTest {
-	private User user;
+	private static User user;
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void setUp() throws Exception {
 		user = EntityBuilder.buildUser("TEST", "TEST","TEST", "TEST", 0);
+		UserDaoImpl.getInstance().add(user);
 	}
 
-	@After
-	public void tearDown () throws Exception {
+	@AfterClass
+	public static void tearDown () throws Exception {
+		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
 		user = null;
 	}
 
@@ -31,58 +33,47 @@ public class UserDaoImplTest {
 		Assert.assertEquals(instance1.hashCode(), instance2.hashCode());
 	}
 
+	@Ignore
 	@Test
 	public void testAdd() throws Exception {
-		UserDaoImpl.getInstance().add(user);
 		User actual = UserDaoImpl.getInstance().getByLogin(user.getLogin());
 		Assert.assertEquals(user, actual);
-		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
 	}
 
+	@Ignore
 	@Test
-	public void testDelete() throws Exception {
-		UserDaoImpl.getInstance().add(user);
-		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
+	public void testDeleteByLogin() throws Exception {
 		User actual = UserDaoImpl.getInstance().getByLogin(user.getLogin());
 		Assert.assertNull(actual);
 	}
 
 	@Test
 	public void testIsAuthorized () throws Exception {
-		UserDaoImpl.getInstance().add(user);
 		boolean isAuthorised = UserDaoImpl.getInstance().isAuthorized(user.getLogin(), user.getPassword());
 		Assert.assertTrue(isAuthorised);
-		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
 	}
 
 	@Test
 	public void testGetById () throws Exception {
-		UserDaoImpl.getInstance().add(user);
 		User actual = UserDaoImpl.getInstance().getById(UserDaoImpl.getInstance().getMaxId());
 		Assert.assertEquals(user, actual);
-		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
 	}
 
 	@Test
 	public void testGetByLogin () throws Exception {
-		UserDaoImpl.getInstance().add(user);
 		User actual = UserDaoImpl.getInstance().getByLogin(user.getLogin());
 		Assert.assertEquals(user, actual);
-		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
 	}
 
 	@Test
 	public void testIsNewUser () throws Exception {
-		UserDaoImpl.getInstance().add(user);
 		boolean isNew = UserDaoImpl.getInstance().isNewUser(user.getLogin());
 		Assert.assertFalse(isNew);
-		UserDaoImpl.getInstance().deleteByLogin(user.getLogin());
 	}
 
 	@Ignore
 	@Test
 	public void testGetMaxId () throws Exception {
-		UserDaoImpl.getInstance().add(user);
 		int expected = user.getId();
 		int actual = UserDaoImpl.getInstance().getMaxId();
 		Assert.assertEquals(expected, actual);
